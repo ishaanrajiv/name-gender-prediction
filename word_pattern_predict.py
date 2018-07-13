@@ -7,13 +7,14 @@ from utils import Utils
 
     
 def main():
+    util=Utils()
     try:
-        encode_dict = Utils().wordPatternDict()
+        encode_dict = util.wordPatternDict()
         gender = {0:'female',1:'male'}
-        model = Utils().wordPatternModel
+        model = util.wordPatternModel
         while(1):
             name=input("\nEnter Name:")
-            gender_arr = Utils().wordPatternGenderPredict(name,encode_dict,model)
+            gender_arr = util.wordPatternGenderPredict(name,encode_dict,model)
             print(gender[np.argmax(gender_arr)],np.max(gender_arr))
     except Exception as e:
         print("Aborting...\n",str(e))
