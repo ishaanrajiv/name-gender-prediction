@@ -44,11 +44,12 @@ def genderPredict(name):
 
 
 #def main():
-while(1):
-    try:
-        name=input("Enter Name:")
-    except Exception as e:
-        print("Aborting...\n",str(e))
-    gender = {0:'female',1:'male'}
-    gender_arr = genderPredict(name)
-    print(gender[np.argmax(gender_arr)],np.max(gender_arr))
+try:
+    while(1):
+        name=input("\nEnter Name:")
+        gender = {0:'female',1:'male'}
+        gender_arr = genderPredict(name)
+        print(gender[np.argmax(gender_arr)],np.max(gender_arr))
+except Exception as e:
+    print("Aborting...\n",str(e))
+    
