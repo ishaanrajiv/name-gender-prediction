@@ -8,11 +8,12 @@ from utils import Utils
     
 def main():
     try:
+        encode_dict = Utils().characterDict()
+        gender = {0:'female',1:'male'}
+        model = Utils().characterModel
         while(1):
             name=input("\nEnter Name:")
-            gender = {0:'female',1:'male'}
-            encode_dict = Utils().characterDict()
-            gender_arr = Utils().characterGenderPredict(name,encode_dict)
+            gender_arr = Utils().characterGenderPredict(name,encode_dict,model)
             print(gender[np.argmax(gender_arr)],np.max(gender_arr))
     except Exception as e:
         print("Aborting...\n",str(e))

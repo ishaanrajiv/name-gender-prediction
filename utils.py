@@ -14,7 +14,9 @@ class Utils:
         self.max_name_length = 20
         self.min_name_length = 3
         self.wordPatternModelPath = "model/word-pattern-nn.hdf5"
+        self.wordPatternModel = load_model("model/word-pattern-nn.hdf5")
         self.characterModelPath = "model/character-nn.hdf5"
+        self.characterModel = load_model("model/character-nn.hdf5")
         self.trainPath = "dataset/train.csv"
         self.testPath = "dataset/test.csv"
         self.staticWordPatternDict = self.wordPatternDict()
@@ -47,12 +49,12 @@ class Utils:
         return [encodeDict[y] for y in final_arr]
 
 
-    def wordPatternGenderPredict(self,name,encodeDict):
+    def wordPatternGenderPredict(self,name,encodeDict,model):
         name=self.wordPatternEncodeNameString(name,encodeDict)
         dim = int(math.log(len(encodeDict),2))+1
-        return load_model(self.wordPatternModelPath).predict(np.array([np.array([(((x & (1 << np.arange(dim)))) > 0).astype(int) for x in name])]))
+        return model.predict(np.array([np.array([(((x & (1 << np.arange(dim)))) > 0).astype(int) for x in name])]))
 
-    def characterGenderPredict(self,name,encodeDict):
+    def characterGenderPredict(self,name,encodeDict,model):
         name=self.characterEncodeNameString(name,encodeDict)
         dim = int(math.log(len(encodeDict),2))+1
-        return load_model(self.characterModelPath).predict(np.array([np.array([(((x & (1 << np.arange(dim)))) > 0).astype(int) for x in name])]))
+        return model.predict(np.array([np.array([(((x & (1 << np.arange(dim)))) > 0).astype(int) for x in name])]))
