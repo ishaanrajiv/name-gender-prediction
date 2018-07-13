@@ -54,7 +54,6 @@ def main():
     input_dim = len(X[0])
     output_dim = len(y[0])
 
-    # Keep only a single checkpoint, the best over test accuracy.
     checkpoint = ModelCheckpoint(util.characterModelPath,
                                 monitor='val_acc',
                                 verbose=1,

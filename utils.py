@@ -29,7 +29,6 @@ class Utils:
         name = str(name).strip().lower()
         return [encodeDict.get(y,0) for y in self.pattern.sub('',str(name)).ljust(self.max_name_length,'X')]
 
-
     def wordPatternDict(self):
         keywords = [''.join(i) for i in product(ascii_lowercase, repeat = 3)] + [''.join(i) for i in product(ascii_lowercase, repeat = 2)] + [''.join(i) for i in product(ascii_lowercase, repeat = 1)]
         encode_dict={'XYZ':0}
@@ -37,17 +36,14 @@ class Utils:
         for word in keywords:
             encode_dict[word]=i
             i+=1
-        # yield encode_dict
         return encode_dict
 
-    ## Cleaning Up
     def wordPatternEncodeNameString(self,name,encodeDict):
         name = self.pattern.sub('', str(name).strip().lower())
         name_arr = self.flatten([[a[0:3],a[-3:],a[0:2],a[-2:]] for a in name.split()[0:2]])
         final_arr = ['XYZ','XYZ','XYZ','XYZ','XYZ','XYZ','XYZ','XYZ']
         final_arr[:len(name_arr)]=name_arr
         return [encodeDict[y] for y in final_arr]
-
 
     def wordPatternGenderPredict(self,name,encodeDict,model):
         name=self.wordPatternEncodeNameString(name,encodeDict)

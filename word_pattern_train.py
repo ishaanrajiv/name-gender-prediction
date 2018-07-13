@@ -24,11 +24,9 @@ def cleanName(dataframe):
 def kerasModel(input_dim,output_dim,char_dim):
     model = Sequential()
     model.add(Dense(input_dim+1, input_shape=(input_dim,char_dim), kernel_initializer='normal', activation='relu',kernel_regularizer=l2(0.3)))
-    # model.add(Dropout(0.5, noise_shape=None, seed=None))
     model.add(Dense(5, init='uniform', activation='relu'))
     model.add(Dropout(0.5, noise_shape=None, seed=None))
     model.add(Dense(3, init='uniform', activation='relu'))
-    # model.add(Dropout(0.5, noise_shape=None, seed=None))
     model.add(Flatten())
     model.add(Dense(output_dim, kernel_initializer='normal', activation='softmax'))
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
@@ -56,7 +54,6 @@ def main():
     input_dim = len(X[0])
     output_dim = len(y[0])
 
-    # Keep only a single checkpoint, the best over test accuracy.
     checkpoint = ModelCheckpoint(util.wordPatternModelPath,
                                 monitor='val_acc',
                                 verbose=1,
