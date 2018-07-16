@@ -21,20 +21,18 @@ def cleanName(dataframe):
     return pd.DataFrame(dataframe)
 
 
-def kerasModel(input_dim,output_dim,dict_len):
+def kerasModel(input_dim,output_dim,char_dim):
     model = Sequential()
-    model.add(Dense(128, input_shape=(8,dict_len), kernel_initializer='normal', activation='relu',kernel_regularizer=l2(0.3)))
-    model.add(Dense(50, init='uniform', activation='relu'))
+    model.add(Dense(input_dim+1, input_shape=(input_dim,char_dim), kernel_initializer='normal', activation='relu',kernel_regularizer=l2(0.3)))
+    model.add(Dense(5, init='uniform', activation='relu'))
     model.add(Dropout(0.5, noise_shape=None, seed=None))
-    model.add(Dense(30, init='uniform', activation='relu'))
+    model.add(Dense(3, init='uniform', activation='relu'))
     model.add(Flatten())
     model.add(Dense(output_dim, kernel_initializer='normal', activation='softmax'))
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
     return model
 
-
 def main():
-    
     global util,encode_dict
 
     df = pd.read_csv(util.trainPath)   
@@ -46,14 +44,12 @@ def main():
         df_X[i]=df_X['Name'].apply(lambda x: x[i])
 
     df_X = df_X.drop(columns=['Name'])
-    df_Y = pd.get_dummies(df['Gender'])
-    
-    y = df_Y.values
 
-    X = np.zeros((len(df_X), 8, len(encode_dict)), dtype=np.bool)
-    for i, name in enumerate(df_X.values):
-        for t, phrase in enumerate(name):
-            X[i, t, phrase] = 1
+    dim = int(math.log(len(encode_dict),2))+1
+    X =np.array([(((x[:,None] & (1 << np.arange(dim)))) > 0).astype(int) for x in df_X.values])
+
+    df_Y = pd.get_dummies(df['Gender'])
+    y = df_Y.values
 
     input_dim = len(X[0])
     output_dim = len(y[0])
@@ -66,9 +62,12 @@ def main():
                                 period=1)
 
 
-    model = kerasModel(input_dim,output_dim,len(encode_dict))
+    model = kerasModel(input_dim,output_dim,dim)
 
-    model.fit(X, y, epochs=50, batch_size=100,  verbose=1, validation_split=0.2, shuffle=True,callbacks=[checkpoint])
+    model.fit(X, y, epochs=5000000, batch_size=15000,  verbose=1, validation_split=0.2, shuffle=True,callbacks=[checkpoint])
 
     model.save(filepath)
 
+
+if __name__ == "__main__":
+    main()
