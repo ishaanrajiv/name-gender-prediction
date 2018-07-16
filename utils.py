@@ -52,6 +52,7 @@ class Utils:
         X = np.zeros((1,self.wordPatternLen, dict_len), dtype=np.bool)
         for t, phrase in enumerate(name):
                 X[0, t, phrase] = 1
+        return model.predict(X)
         # dim = int(math.log(len(encodeDict),2))+1
         # return model.predict(np.array([np.array([(((x & (1 << np.arange(dim)))) > 0).astype(int) for x in name])]))
 
