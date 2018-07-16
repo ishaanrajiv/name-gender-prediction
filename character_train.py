@@ -66,7 +66,7 @@ def main():
 
     model.fit(X, y, epochs=5000000, batch_size=15000,  verbose=1, validation_split=0.2, shuffle=True,callbacks=[checkpoint])
 
-    model.save(filepath)
+    model.save(util.characterModelPath)
 
 
 if __name__ == "__main__":

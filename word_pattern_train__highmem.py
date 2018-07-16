@@ -70,5 +70,9 @@ def main():
 
     model.fit(X, y, epochs=50, batch_size=100,  verbose=1, validation_split=0.2, shuffle=True,callbacks=[checkpoint])
 
-    model.save(filepath)
+    model.save(util.wordPatternModelPath)
+
+
+if __name__ == "__main__":
+    main()
 
