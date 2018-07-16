@@ -19,9 +19,9 @@ class Utils:
         self.characterModel = load_model("model/character-nn.hdf5")
         self.trainPath = "dataset/train.csv"
         self.testPath = "dataset/test.csv"
-        self.wordPatternLen = 8
         self.staticWordPatternDict = self.wordPatternDict()
         self.staticcharacterDict = self.characterDict()
+        self.wordPatternLen = 8
 
     def characterDict(self):
         return dict(zip(list(self.pattern.sub('', string.printable)+'X'),range(27,-1,-1)))
@@ -48,13 +48,16 @@ class Utils:
 
     def wordPatternGenderPredict(self,name,encodeDict,model):
         name=self.wordPatternEncodeNameString(name,encodeDict)
+        dim = int(math.log(len(encodeDict),2))+1
+        return model.predict(np.array([np.array([(((x & (1 << np.arange(dim)))) > 0).astype(int) for x in name])]))
+
+    def newWordPatternGenderPredict(self,name,encodeDict,model):
+        name=self.wordPatternEncodeNameString(name,encodeDict)
         dict_len = len(encodeDict)
         X = np.zeros((1,self.wordPatternLen, dict_len), dtype=np.bool)
         for t, phrase in enumerate(name):
                 X[0, t, phrase] = 1
         return model.predict(X)
-        # dim = int(math.log(len(encodeDict),2))+1
-        # return model.predict(np.array([np.array([(((x & (1 << np.arange(dim)))) > 0).astype(int) for x in name])]))
 
     def characterGenderPredict(self,name,encodeDict,model):
         name=self.characterEncodeNameString(name,encodeDict)
