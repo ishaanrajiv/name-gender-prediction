@@ -64,9 +64,9 @@ def main():
 
     model = kerasModel(input_dim,output_dim,dim)
 
-    model.fit(X, y, epochs=5000000, batch_size=15000,  verbose=1, validation_split=0.2, shuffle=True,callbacks=[checkpoint])
+    model.fit(X, y, epochs=5000, batch_size=15000,  verbose=1, validation_split=0.2, shuffle=True,callbacks=[checkpoint])
 
-    model.save(filepath)
+    model.save(util.wordPatternModelPath)
 
 
 if __name__ == "__main__":
